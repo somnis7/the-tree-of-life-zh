@@ -1,0 +1,19 @@
+html[lang="zh-CN"] body, html[lang="zh-CN"] body * {
+    font-family: Inconsolata, "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+html[lang="zh-CN"] .opt {
+    min-width: 116px;
+    padding: 8px;
+    line-height: 1.5;
+    color: #303030;
+}
+#life-language {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 10000;
+    min-width: 88px;
+    width: auto;
+    height: auto;
+    padding: 8px 12px;
+}
