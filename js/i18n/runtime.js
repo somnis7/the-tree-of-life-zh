@@ -9,15 +9,37 @@
         .sort((a, b) => b.length - a.length).map(escape).join('|') + ')\\b', 'g');
     let language = 'zh-CN';
     try { language = localStorage.getItem('life-translation-language') || language; } catch (_) {}
+    const textSizes = [0.9, 1, 1.12];
+    let textSize = 1;
+    try {
+        const stored = Number(localStorage.getItem('life-translation-text-size'));
+        if (textSizes.includes(stored)) textSize = stored;
+    } catch (_) {}
     const htmlCache = new Map();
+    function translateTerms(text) {
+        return text.replace(termPattern, (match, offset, source) => {
+            const translated = dictionary.terms[match];
+            if (translated.endsWith(match) && translated !== match) {
+                const prefix = translated.slice(0, -match.length);
+                if (source.slice(0, offset).endsWith(prefix)) return match;
+            }
+            return translated;
+        });
+    }
     function translate(text) {
         if (language !== 'zh-CN' || typeof text !== 'string' || !/[A-Za-z]/.test(text)) return text;
         const key = text.trim().replace(/\s+/g, ' ');
         let result;
         if (own(dictionary.exact, key)) result = dictionary.exact[key];
         else {
-            for (const [pattern, replacement] of dictionary.rules) {
-                if (pattern.test(key)) { result = key.replace(pattern, replacement); break; }
+            const label = key.match(/^(Reward|Currently|Next|Cost|Goal):\s*(.+)$/);
+            if (label) {
+                const labels = { Reward: '奖励：', Currently: '当前：', Next: '下一项：', Cost: '花费：', Goal: '目标：' };
+                result = labels[label[1]] + translate(label[2]);
+            } else {
+                for (const [pattern, replacement] of dictionary.rules) {
+                    if (pattern.test(key)) { result = key.replace(pattern, replacement); break; }
+                }
             }
             if (result === undefined) {
                 // Only record stable, short strings; do not store changing giant numbers or saves.
@@ -25,7 +47,7 @@
                 result = key;
             }
             // Translate complete resources, never isolated substrings inside identifiers.
-            result = result.replace(termPattern, match => dictionary.terms[match]);
+            result = translateTerms(result);
             // Option values occur inside labels as well as in their own nodes.
             if (/^(Autosave|Offline Prod|Theme|Show Milestones|High-Quality Tree|Completed Challenges|Single-Tab Mode|Shift-Click to Toggle Tooltips|Popups are):/.test(key)) {
                 for (const word of ['ALL (recommended)', 'LAST, AUTO, INCOMPLETE', 'AUTOMATION, INCOMPLETE', 'INCOMPLETE', 'NONE', 'HIDDEN', 'SHOWN', 'ALWAYS', 'AUTO', 'ON', 'OFF', 'default']) {
@@ -33,6 +55,7 @@
                 }
             }
         }
+        if (result === key) return text;
         return text.slice(0, text.length - text.trimStart().length) + result + text.slice(text.trimEnd().length);
     }
     function translateHTML(html) {
@@ -92,20 +115,44 @@
         if (typeof root.save === 'function' && typeof root.allSaves !== 'undefined') root.save();
         root.location.reload();
     }
+    function setTextSize(size) {
+        if (!textSizes.includes(size)) return;
+        textSize = size;
+        try { localStorage.setItem('life-translation-text-size', String(size)); } catch (_) {}
+        if (typeof document !== 'undefined') {
+            document.documentElement.style.setProperty('--life-text-scale', size);
+            const button = document.getElementById('life-text-size');
+            if (button) button.textContent = language === 'zh-CN'
+                ? '字号：' + ({ 0.9: '紧凑', 1: '标准', 1.12: '大' })[size]
+                : 'Text: ' + ({ 0.9: 'Small', 1: 'Normal', 1.12: 'Large' })[size];
+        }
+    }
     root.LifeI18n = {
-        translate, translateHTML, translateVNode, setLanguage,
+        translate, translateHTML, translateVNode, setLanguage, setTextSize,
         get language() { return language; },
+        get textSize() { return textSize; },
         getMissing: () => Array.from(missing).sort(),
     };
     if (typeof document !== 'undefined') document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.lang = language === 'zh-CN' ? 'zh-CN' : 'en';
         document.title = language === 'zh-CN' ? '生命树 · 独立汉化' : 'The Tree of Life';
+        const toolbar = document.createElement('div');
+        toolbar.id = 'life-controls';
+        toolbar.setAttribute('role', 'group');
+        toolbar.setAttribute('aria-label', language === 'zh-CN' ? '显示设置' : 'Display settings');
+        const sizeButton = document.createElement('button');
+        sizeButton.id = 'life-text-size';
+        sizeButton.className = 'opt';
+        sizeButton.addEventListener('click', () => setTextSize(textSizes[(textSizes.indexOf(textSize) + 1) % textSizes.length]));
+        toolbar.appendChild(sizeButton);
         const button = document.createElement('button');
         button.id = 'life-language';
         button.className = 'opt';
         button.textContent = language === 'zh-CN' ? 'English' : '简体中文';
         button.setAttribute('aria-label', language === 'zh-CN' ? 'Switch to English' : '切换为简体中文');
         button.addEventListener('click', () => setLanguage(language === 'zh-CN' ? 'en' : 'zh-CN'));
-        document.body.appendChild(button);
+        toolbar.appendChild(button);
+        document.body.appendChild(toolbar);
+        setTextSize(textSize);
     });
 })(typeof window === 'undefined' ? globalThis : window);

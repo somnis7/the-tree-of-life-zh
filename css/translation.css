@@ -1,19 +1,64 @@
-html[lang="zh-CN"] body, html[lang="zh-CN"] body * {
-    font-family: Inconsolata, "Microsoft YaHei", "PingFang SC", sans-serif;
+/* System fonts work offline; tabular figures keep changing numbers aligned. */
+:root { --life-text-scale: 1; }
+html body, html body * {
+    font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
 }
-html[lang="zh-CN"] .opt {
-    min-width: 116px;
-    padding: 8px;
-    line-height: 1.5;
-    color: #303030;
+html body { font-size: calc(15px * var(--life-text-scale)); line-height: 1.65; }
+html body h1, html body h2, html body h3, html body b, html body strong { font-weight: 650; }
+html body button { font-weight: 500; }
+html body button b, html body button strong { font-weight: 600; }
+html body code, html body pre { font-family: "Cascadia Code", Consolas, "Microsoft YaHei", monospace; }
+html body .buyable {
+    box-sizing: border-box; width: 220px; height: auto; min-height: 250px;
+    padding: 16px 12px; border-radius: 18px;
+    font-size: calc(13px * var(--life-text-scale)); line-height: 1.65;
+    color: #242020; vertical-align: top; overflow-wrap: anywhere;
 }
-#life-language {
-    position: fixed;
-    right: 12px;
-    bottom: 12px;
-    z-index: 10000;
-    min-width: 88px;
-    width: auto;
-    height: auto;
-    padding: 8px 12px;
+html body .buyable h2 { font-size: 1.08em; }
+html body .buyable h3 { font-size: 1.12em; }
+html body .buyable b { font-weight: 500; }
+html body .upg {
+    box-sizing: border-box; width: 132px; min-height: 154px; padding: 10px 8px;
+    border-radius: 14px; font-size: calc(12px * var(--life-text-scale)); line-height: 1.6;
+    color: #242020; overflow-wrap: anywhere; vertical-align: top;
+}
+html body .upg h3 { font-size: 1.1em; }
+html body .milestone, html body .milestoneDone {
+    box-sizing: border-box; height: auto; min-height: 84px; padding: 12px 14px;
+    font-size: calc(14px * var(--life-text-scale)); line-height: 1.65; color: #202820;
+}
+html body .challenge {
+    box-sizing: border-box; width: 310px; height: auto; min-height: 330px;
+    padding: 18px 16px; border-radius: 18px;
+    font-size: calc(14px * var(--life-text-scale)); line-height: 1.7;
+    color: #292323; overflow-wrap: anywhere;
+}
+html body .tabButton { font-size: calc(16px * var(--life-text-scale)); line-height: 1.5; padding: 7px 14px; }
+html body .opt {
+    box-sizing: border-box; min-width: 126px; height: auto; min-height: 86px;
+    padding: 10px; border-radius: 15px;
+    font-size: calc(14px * var(--life-text-scale)); line-height: 1.6; color: #303030;
+}
+html body .longUpg {
+    min-width: 150px; height: auto; min-height: 52px; padding: 8px 12px;
+    border-radius: 14px; font-size: calc(13px * var(--life-text-scale)); line-height: 1.5;
+}
+html body .buyable.can:hover, html body .upg.can:hover { transform: translateY(-2px); }
+html body .buyable.bought:hover, html body .upg.bought:hover { transform: none; }
+html body .link { -webkit-text-stroke-width: 0; font-weight: 500; }
+#life-controls {
+    position: fixed; right: 12px; bottom: 12px; z-index: 10000;
+    display: flex; align-items: center; gap: 6px; padding: 5px;
+    border: 1px solid #7776; border-radius: 13px; background: #171717e8;
+}
+html body #life-controls .opt {
+    min-width: 88px; width: auto; min-height: 34px; padding: 5px 10px;
+    border: 1px solid #8886; border-radius: 8px; font-size: 13px;
+}
+@media (max-width: 700px) {
+    html body .buyable { width: 200px; }
+    html body .opt { min-width: 110px; }
+    #life-controls { right: 6px; bottom: 6px; }
 }

@@ -85,6 +85,7 @@
         },
         // Longest terms are matched first. Boundaries prevent changing formula identifiers.
         terms: {
+            'Lives': '生命', 'Life': '生命',
             'Stem Cells': '干细胞', 'Stem Cell': '干细胞',
             'Life Points': '生命点', 'Life Point': '生命点',
             'Tokens II': '代币 II', 'Token II': '代币 II',
