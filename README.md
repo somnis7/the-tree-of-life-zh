@@ -6,30 +6,11 @@
 
 **当前为汉化起步版，尚未完整翻译全游戏。** 已加入基础菜单、设置、常用资源名、细胞阶段部分术语和中英文切换。大量升级、挑战说明和后期内容仍待翻译、校对。
 
-## 本地运行
-
-安装 Node.js 后，在本目录执行：
-
-```sh
-node tools/serve.cjs
-```
-
-打开 http://127.0.0.1:8080/ 。无需安装额外依赖。右下角可切换中英文。
-
 ## 参与汉化
 
 编辑 [js/i18n/zh-CN.js](js/i18n/zh-CN.js)。详细步骤和术语约定见 [汉化指南](docs/translation.md)。
 
 购买项使用“中文＋英文原名”，例如“全能 Totipotent”和“多能 Multipotent”，便于与公式及攻略对照。所有数值、公式、内部标识和存档字段保持原文。
-
-## 发布到自己的 GitHub
-
-1. 在自己的账号下新建公开仓库，建议名称 `the-tree-of-life-zh`，不要预先生成 README、许可证或 .gitignore。
-2. 将本项目推送到仓库的 `main` 分支。发布用压缩包也可解压后通过 GitHub 的 **Add file → Upload files** 上传；需上传项目根目录的内容，而不是外层文件夹。
-3. 仓库 **Settings → Pages → Build and deployment** 中选择 **Deploy from a branch**，分支选择 `main`，目录选择 `/ (root)`，保存。
-4. 部署成功后，从 Pages 页面打开实际访问地址。
-
-完整操作命令与第一次发布注意事项见 [发布指南](docs/publishing.md)。
 
 ## 存档
 
