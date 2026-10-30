@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const path = require('node:path');
 function runtime() {
     const context = vm.createContext({ localStorage: { getItem: () => null } });
-    for (const file of ['zh-CN.js', 'progression.js', 'runtime.js']) vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/i18n', file), 'utf8'), context);
+    for (const file of ['zh-CN.js', 'progression.js', 'molecular.js', 'runtime.js']) vm.runInContext(fs.readFileSync(path.join(__dirname, '../js/i18n', file), 'utf8'), context);
     return context.LifeI18n;
 }
 test('exact terms stay distinct and include the English names', () => {
@@ -61,4 +61,24 @@ test('font sizes accept only supported display settings', () => {
     assert.equal(api.textSize, 1.12);
     api.setTextSize(5);
     assert.equal(api.textSize, 1.12);
+});
+test('Anti- challenge restrictions keep their exact Dilation exponent', () => {
+    const t = runtime().translate;
+    assert.equal(t('Dilation at 110 completions and subtract .26 from the Dilation exponent'), '以完成 110 次的膨胀挑战为基础，膨胀指数再减少 .26');
+    assert.equal(t('Requires being in C88. Customizable and raise dilation effect ^1.4'), '需要选择 C88；进入自定义挑战，并将膨胀效果取 1.4 次方');
+    assert.equal(t('Goal: e1e1,989,000 Points'), '目标：e1e1,989,000 生命点');
+});
+test('nested rewards keep RNA names, logarithm bases, and quantities', () => {
+    const t = runtime().translate;
+    assert.equal(t('Reward: Add .001 to tRNA base.'), '奖励：tRNA 底数增加 .001。');
+    assert.equal(t("β → ∂α's log10 becomes log8."), 'β → ∂α 的 log10 改为 log8。');
+    assert.equal(t('Life IV becomes every Dilation completion'), '生命升级 IV 改为每次膨胀挑战完成均生效');
+});
+test('gem descriptions distinguish resource multipliers from initial costs', () => {
+    const t = runtime().translate;
+    assert.equal(t('Divide N → ΔP initial cost'), '降低 N → ΔP 初始花费');
+    assert.equal(t('DNA gain per non-0 gem'), '每种非零宝石对 DNA 产量的加成');
+    assert.equal(t('Remove the /4.4e144 in DNA gain formula'), '移除 DNA 产量公式中的 /4.4e144');
+    assert.equal(t('Add to α → ∂𝛾 base'), '增加 α → ∂𝛾 底数');
+    assert.equal(t('1+x^log10(DNA)/100'), '1+x^log10(DNA)/100');
 });

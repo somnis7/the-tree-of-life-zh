@@ -25,6 +25,20 @@ html body .upg {
     color: #242020; overflow-wrap: anywhere; vertical-align: top;
 }
 html body .upg h3 { font-size: 1.1em; }
+html body .tile {
+    box-sizing: border-box;
+    width: 82px;
+    height: auto;
+    min-height: 142px;
+    padding: 8px 5px;
+    border-radius: 11px;
+    font-size: calc(11.5px * var(--life-text-scale));
+    line-height: 1.5;
+    color: #171723;
+    overflow-wrap: anywhere;
+}
+html body .tile h3 { font-size: 1.05em; }
+html body .tile.can:hover { transform: translateY(-1px); }
 html body .milestone, html body .milestoneDone {
     box-sizing: border-box; height: auto; min-height: 84px; padding: 12px 14px;
     font-size: calc(14px * var(--life-text-scale)); line-height: 1.65; color: #202820;
